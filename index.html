@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +16,7 @@
       height: 100vh;
       background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
@@ -80,10 +80,16 @@
       padding: 30px;
       color: white;
     }
+
+    #runBtn {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
-  <div class="container" id="form-container">
+  <button id="runBtn">Run</button>
+
+  <div class="container hidden" id="form-container">
     <h2>Enter Your Name</h2>
     <div class="input-wrapper">
       <input type="text" id="nameInput" placeholder="Your Name" />
@@ -104,6 +110,7 @@
   </div>
 
   <script>
+    const runBtn = document.getElementById('runBtn');
     const nameInput = document.getElementById('nameInput');
     const codeSection = document.getElementById('codeSection');
     const codeInput = document.getElementById('codeInput');
@@ -111,6 +118,27 @@
     const submitBtn = document.getElementById('submitBtn');
     const formContainer = document.getElementById('form-container');
     const loadingScreen = document.getElementById('loadingScreen');
+
+    
+    runBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      const code = codeInput.value.trim();
+
+      if (name.length === 0 || code.length <= 3) {
+        alert("Please enter both name and a valid unique code (at least 4 characters).");
+        return;
+      }
+
+      tick.style.display = 'inline';
+      formContainer.style.display = 'none';
+      runBtn.classList.add('hidden');
+      loadingScreen.style.display = 'flex';
+
+      setTimeout(() => {
+        loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
+      }, 10000);
+    });
+    
 
     nameInput.addEventListener('change', () => {
       if (nameInput.value.trim() !== '') {
@@ -127,16 +155,12 @@
     });
 
     submitBtn.addEventListener('click', () => {
-      if (nameInput.value.trim() !== '' && codeInput.value.trim().length > 3) {
-        formContainer.style.display = 'none';
-        loadingScreen.style.display = 'flex';
+      formContainer.style.display = 'none';
+      loadingScreen.style.display = 'flex';
 
-        setTimeout(() => {
-          loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
-        }, 10000);
-      } else {
-        alert('Please fill in both fields correctly.');
-      }
+      setTimeout(() => {
+        loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
+      }, 10000);
     });
   </script>
 </body>
