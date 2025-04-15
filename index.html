@@ -127,12 +127,16 @@
     });
 
     submitBtn.addEventListener('click', () => {
-      formContainer.style.display = 'none';
-      loadingScreen.style.display = 'flex';
+      if (nameInput.value.trim() !== '' && codeInput.value.trim().length > 3) {
+        formContainer.style.display = 'none';
+        loadingScreen.style.display = 'flex';
 
-      setTimeout(() => {
-        loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
-      }, 10000);
+        setTimeout(() => {
+          loadingScreen.innerHTML = '<h2>Your account is safe</h2>';
+        }, 10000);
+      } else {
+        alert('Please fill in both fields correctly.');
+      }
     });
   </script>
 </body>
